@@ -16,13 +16,15 @@ export const flattenToRows = (data: SomeInterface) => {
   return regions
 }
 
-const mapSubRegion = (data) => {
-  return data.allContentfulDataGeoRegionSubRegion.nodes.map((subRegion) => {
-    return {
-      contentfulId: subRegion.contentful_id,
-      name: subRegion.name,
-    }
-  })
+const mapSubRegion = (data, regionId) => {
+  return data.allContentfulDataGeoRegionSubRegion.nodes
+    .filter((subRegion) => subRegion.region.contentful_id === regionId)
+    .map((subRegion) => {
+      return {
+        contentfulId: subRegion.contentful_id,
+        name: subRegion.name,
+      }
+    })
 }
 
 const mapRegion = (data) => {
@@ -30,7 +32,7 @@ const mapRegion = (data) => {
     return {
       contentfulId: region.contentful_id,
       name: region.name,
-      subRegions: mapSubRegion(data),
+      subRegions: mapSubRegion(data, region.contentful_id),
     }
   })
 }

@@ -183,6 +183,67 @@ describe('Where We Work', function () {
       expect(flattenToRows(greeceData)).to.deep.equal(expected)
     })
 
+    it('flattens multiple regions', function () {
+      const greeceAndFrance = {
+        allContentfulDataGeoRegionSubRegion: {
+          nodes: [
+            {
+              contentful_id: '15DzXnD4u70h24CQORFsiT',
+              name: 'Athens/Southern Mainland',
+              slug: 'athens-southern-mainland',
+              region: { contentful_id: '4nuGDkPN1NvvBYpCnu2O73' },
+            },
+            {
+              contentful_id: '5QleMRmhfjcCPJcl0hyapC',
+              name: 'Calais/Dunkirk',
+              slug: 'calais-dunkirk',
+              region: { contentful_id: '3MYazP862LGoycVYX2w492' },
+            },
+          ],
+        },
+        allContentfulDataGeoRegion: {
+          nodes: [
+            {
+              contentful_id: '4nuGDkPN1NvvBYpCnu2O73',
+              name: 'Greece',
+              slug: 'greece',
+            },
+            {
+              contentful_id: '3MYazP862LGoycVYX2w492',
+              name: 'France',
+              slug: 'france',
+            },
+          ],
+        },
+      }
+
+      const expected = [
+        {
+          contentfulId: '4nuGDkPN1NvvBYpCnu2O73',
+          name: 'Greece',
+          subRegions: [
+            {
+              contentfulId: '15DzXnD4u70h24CQORFsiT',
+              name: 'Athens/Southern Mainland',
+            },
+          ],
+        },
+
+        {
+          contentfulId: '3MYazP862LGoycVYX2w492',
+          name: 'France',
+          subRegions: [
+            {
+              contentfulId: '5QleMRmhfjcCPJcl0hyapC',
+              name: 'Calais/Dunkirk',
+            },
+          ],
+        },
+      ]
+
+      expect(flattenToRows(greeceAndFrance)).to.deep.equal(expected)
+    })
+
     xit('flattens multiple sub-regions', function () {
       const greeceMultiSubRegionData = {
         allContentfulDataGeoRegionSubRegion: {
