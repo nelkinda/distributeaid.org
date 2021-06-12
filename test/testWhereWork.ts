@@ -147,11 +147,6 @@ const greeceData = {
         name: 'Greece',
         slug: 'greece',
       },
-      {
-        contentful_id: '3MYazP862LGoycVYX2w492',
-        name: 'France',
-        slug: 'france',
-      },
     ],
   },
   allContentfulDataGeoRegionSubRegion: {
@@ -212,11 +207,6 @@ describe('Where We Work', function () {
               contentful_id: '4nuGDkPN1NvvBYpCnu2O73',
               name: 'Greece',
               slug: 'greece',
-            },
-            {
-              contentful_id: '3MYazP862LGoycVYX2w492',
-              name: 'France',
-              slug: 'france',
             },
           ],
         },
