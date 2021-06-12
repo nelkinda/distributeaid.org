@@ -19,6 +19,8 @@ import TableHeader from '../components/table/TableHeader'
 //  "Greece         Athens, Chios, Samos"
 //  "British Isles  Scotland, England, Wales"
 
+// { France: [ Calais, Dunkirk, Paris ],  }
+
 const IndeterminateCheckbox = React.forwardRef(
   ({ indeterminate, ...rest }, ref) => {
     const defaultRef = React.useRef()
@@ -34,20 +36,16 @@ const IndeterminateCheckbox = React.forwardRef(
 
 const COLUMNS = [
   {
-    Header: 'Name',
+    Header: 'Region Name',
     accessor: (row) => row.regionName,
   },
   {
-    Header: 'Slug',
+    Header: 'Region Slug',
     accessor: (row) => row.regionSlug,
   },
   {
-    Header: 'SubRegion Name',
+    Header: 'List of SubRegions',
     accessor: (row) => row.name,
-  },
-  {
-    Header: 'SubRegion Slug',
-    accessor: (row) => row.slug,
   },
 ]
 
@@ -62,14 +60,23 @@ interface Props {
 const flattenToRows = (data: Props) => {
   if (!data) return []
   const {
-    allContentfulDataGeoRegion: { nodes: regionNodes },
-    allContentfulDataGeoRegionSubRegion: { nodes: subRegionNodes },
+    allContentfulDataGeoRegion: { nodes: regionNodes }, // regionNodes ['France', 'Greece', ...]
+    allContentfulDataGeoRegionSubRegion: { nodes: subRegionNodes }, // subRegionNodes {name: "Calais/Dunkirk", region: {contentful_id: "3MYazP862LGoycVYX2w492"}}
   } = data
+  const displaySubRegion = {}
   return subRegionNodes.map((subRegionNode) => {
     const matchingRegion = regionNodes.find(
       (regionNode) =>
         regionNode.contentful_id === subRegionNode.region.contentful_id,
     )
+
+    if (displaySubRegion[matchingRegion.name]) {
+      displaySubRegion[matchingRegion.name].push(subRegionNode.name)
+    } else {
+      displaySubRegion[matchingRegion.name] = [subRegionNode.name]
+    }
+
+    console.log(displaySubRegion)
 
     return {
       ...subRegionNode,
