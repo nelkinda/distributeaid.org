@@ -1,9 +1,5 @@
 import { expect } from 'chai'
 import 'mocha'
-// import { graphql } from 'gatsby'
-// import React, { FunctionComponent, useMemo } from 'react'
-// import { useSortBy, useTable } from 'react-table'
-// import TableHeader from '../src/components/table/TableHeader'
 import { flattenToRows } from '../src/pages/flattenToRows'
 
 const validData = {
@@ -143,11 +139,53 @@ const validData = {
   },
 }
 
+const greeceData = {
+  allContentfulDataGeoRegionSubRegion: {
+    nodes: [
+      {
+        contentful_id: '15DzXnD4u70h24CQORFsiT',
+        name: 'Athens/Southern Mainland',
+        slug: 'athens-southern-mainland',
+        region: { contentful_id: '4nuGDkPN1NvvBYpCnu2O73' },
+      },
+    ],
+  },
+  allContentfulDataGeoRegion: {
+    nodes: [
+      {
+        contentful_id: '4nuGDkPN1NvvBYpCnu2O73',
+        name: 'Greece',
+        slug: 'greece',
+      },
+      {
+        contentful_id: '3MYazP862LGoycVYX2w492',
+        name: 'France',
+        slug: 'france',
+      },
+    ],
+  },
+}
+
 describe('Where We Work', function () {
   describe('flattenToRows', function () {
     it('Can Be Called', function () {
       flattenToRows(validData)
-      expect(1).to.equal(1)
+    })
+    it('returns valid data', function () {
+      const expected = [
+        {
+          contentful_id: '15DzXnD4u70h24CQORFsiT',
+          name: 'Athens/Southern Mainland',
+          region: {
+            contentful_id: '4nuGDkPN1NvvBYpCnu2O73',
+          },
+          regionContentfulId: '4nuGDkPN1NvvBYpCnu2O73',
+          regionName: 'Greece',
+          regionSlug: 'greece',
+          slug: 'athens-southern-mainland',
+        },
+      ]
+      expect(flattenToRows(greeceData)).to.deep.equal(expected)
     })
   })
 })

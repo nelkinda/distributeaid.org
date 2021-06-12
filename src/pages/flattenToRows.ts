@@ -5,14 +5,19 @@ export interface Props {
   }
 }
 
+export interface SomeInterface {
+  allContentfulDataGeoRegion: { nodes }
+  allContentfulDataGeoRegionSubRegion: { nodes }
+}
+
 // [{contentfulId, name, slug, subRegionName, subRegionSlug, subRegionContentfulId]}]
-export const flattenToRows = (data: any) => {
+export const flattenToRows = (data: SomeInterface) => {
   if (!data) return []
   const {
     allContentfulDataGeoRegion: { nodes: regionNodes }, // regionNodes ['France', 'Greece', ...]
     allContentfulDataGeoRegionSubRegion: { nodes: subRegionNodes }, // subRegionNodes {name: "Calais/Dunkirk", region: {contentful_id: "3MYazP862LGoycVYX2w492"}}
   } = data
-  console.log(JSON.stringify(data))
+  // console.log(JSON.stringify(data))
   const displaySubRegion = {}
   return data.allContentfulDataGeoRegionSubRegion.nodes.map((subRegionNode) => {
     const matchingRegion = regionNodes.find(
@@ -26,7 +31,7 @@ export const flattenToRows = (data: any) => {
       displaySubRegion[matchingRegion.name] = [subRegionNode.name]
     }
 
-    console.log(displaySubRegion)
+    // console.log(displaySubRegion)
 
     return {
       ...subRegionNode,
