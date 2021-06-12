@@ -32,12 +32,15 @@ export const flattenToRows = (data: SomeInterface) => {
     }
 
     // console.log(displaySubRegion)
+    const subRegion = {
+      contentfulId: subRegionNode.contentful_id,
+      name: subRegionNode.name,
+    }
 
     return {
-      ...subRegionNode,
-      regionContentfulId: matchingRegion.contentful_id,
-      regionName: matchingRegion.name,
-      regionSlug: matchingRegion.slug,
+      contentfulId: matchingRegion.contentful_id,
+      name: matchingRegion.name,
+      subRegions: [subRegion],
     }
   })
 }
