@@ -183,7 +183,7 @@ describe('Where We Work', function () {
       expect(flattenToRows(greeceData)).to.deep.equal(expected)
     })
 
-    xit('flattens and comma-separates two sub-region', function () {
+    xit('flattens multiple sub-regions', function () {
       const greeceMultiSubRegionData = {
         allContentfulDataGeoRegionSubRegion: {
           nodes: [
