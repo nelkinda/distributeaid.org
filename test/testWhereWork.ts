@@ -140,16 +140,6 @@ const validData = {
 }
 
 const greeceData = {
-  allContentfulDataGeoRegionSubRegion: {
-    nodes: [
-      {
-        contentful_id: '15DzXnD4u70h24CQORFsiT',
-        name: 'Athens/Southern Mainland',
-        slug: 'athens-southern-mainland',
-        region: { contentful_id: '4nuGDkPN1NvvBYpCnu2O73' },
-      },
-    ],
-  },
   allContentfulDataGeoRegion: {
     nodes: [
       {
@@ -164,9 +154,6 @@ const greeceData = {
       },
     ],
   },
-}
-
-const greeceMultiSubRegionData = {
   allContentfulDataGeoRegionSubRegion: {
     nodes: [
       {
@@ -174,26 +161,6 @@ const greeceMultiSubRegionData = {
         name: 'Athens/Southern Mainland',
         slug: 'athens-southern-mainland',
         region: { contentful_id: '4nuGDkPN1NvvBYpCnu2O73' },
-      },
-      {
-        contentful_id: 'YEHgwxNjCpd8nD3FG651I',
-        name: 'Aegean Islands',
-        slug: 'aegean-islands',
-        region: { contentful_id: '4nuGDkPN1NvvBYpCnu2O73' },
-      },
-    ],
-  },
-  allContentfulDataGeoRegion: {
-    nodes: [
-      {
-        contentful_id: '4nuGDkPN1NvvBYpCnu2O73',
-        name: 'Greece',
-        slug: 'greece',
-      },
-      {
-        contentful_id: '3MYazP862LGoycVYX2w492',
-        name: 'France',
-        slug: 'france',
       },
     ],
   },
@@ -219,6 +186,59 @@ describe('Where We Work', function () {
         },
       ]
       expect(flattenToRows(greeceData)).to.deep.equal(expected)
+    })
+
+    xit('flattens and comma-separates two sub-region', function () {
+      const greeceMultiSubRegionData = {
+        allContentfulDataGeoRegionSubRegion: {
+          nodes: [
+            {
+              contentful_id: '15DzXnD4u70h24CQORFsiT',
+              name: 'Athens/Southern Mainland',
+              slug: 'athens-southern-mainland',
+              region: { contentful_id: '4nuGDkPN1NvvBYpCnu2O73' },
+            },
+            {
+              contentful_id: 'YEHgwxNjCpd8nD3FG651I',
+              name: 'Aegean Islands',
+              slug: 'aegean-islands',
+              region: { contentful_id: '4nuGDkPN1NvvBYpCnu2O73' },
+            },
+          ],
+        },
+        allContentfulDataGeoRegion: {
+          nodes: [
+            {
+              contentful_id: '4nuGDkPN1NvvBYpCnu2O73',
+              name: 'Greece',
+              slug: 'greece',
+            },
+            {
+              contentful_id: '3MYazP862LGoycVYX2w492',
+              name: 'France',
+              slug: 'france',
+            },
+          ],
+        },
+      }
+
+      const expected = [
+        {
+          contentfulId: '4nuGDkPN1NvvBYpCnu2O73',
+          name: 'Greece',
+          subRegions: [
+            {
+              contentfulId: '15DzXnD4u70h24CQORFsiT',
+              name: 'Athens/Southern Mainland',
+            },
+            {
+              contentfulId: 'YEHgwxNjCpd8nD3FG651I',
+              name: 'Aegean Islands',
+            },
+          ],
+        },
+      ]
+      expect(flattenToRows(greeceMultiSubRegionData)).to.deep.equal(expected)
     })
   })
 })
