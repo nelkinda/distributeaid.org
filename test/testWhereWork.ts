@@ -104,4 +104,12 @@ describe('Where We Work', function () {
       expect(flattenToRows(data)).to.deep.equal(expected)
     })
   })
+
+  it('skips regions that do not have sub-regions', () => {
+    const data = givenData([regionGreece], [])
+
+    const expected = []
+
+    expect(flattenToRows(data)).to.deep.equal(expected)
+  })
 })
