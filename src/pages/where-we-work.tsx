@@ -38,15 +38,11 @@ const IndeterminateCheckbox = React.forwardRef(
 const COLUMNS = [
   {
     Header: 'Region Name',
-    accessor: (row) => row.regionName,
-  },
-  {
-    Header: 'Region Slug',
-    accessor: (row) => row.regionSlug,
+    accessor: (row) => row.name,
   },
   {
     Header: 'List of SubRegions',
-    accessor: (row) => row.name,
+    accessor: (row) => row.subRegions.map((item) => item.name).join(', '),
   },
 ]
 

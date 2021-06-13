@@ -2,6 +2,15 @@ import { expect } from 'chai'
 import 'mocha'
 import { flattenToRows } from '../src/pages/flattenToRows'
 
+/* Data structure 
+    // TODO - figure out best place to put documentation
+        contentful_id:  primary key for this record
+        name: name of geographical area (region or subregion)
+        slug: slug is like a URL friendly name for the subregion
+        region: includes { contentful_id: }
+            records that are regions will have 3 attributes:      contentful_id: name: slug: 
+            records that are sub regions then it has 4 attributes: contentful_id: name: slug: region
+*/
 const validData = {
   allContentfulDataGeoRegionSubRegion: {
     nodes: [
@@ -161,6 +170,35 @@ const greeceData = {
   },
 }
 
+const regionFrance = {
+  contentful_id: '3MYazP862LGoycVYX2w492',
+  name: 'France',
+  slug: 'france',
+}
+const regionGreece = {
+  contentful_id: '4nuGDkPN1NvvBYpCnu2O73',
+  name: 'Greece',
+  slug: 'greece',
+}
+
+const subregionParis = {
+  contentful_id: '3I4MuzlfM7e0w55FlSa04n',
+  name: 'Paris',
+  slug: 'paris',
+  region: { contentful_id: '3MYazP862LGoycVYX2w492' },
+}
+
+function givenData(regions, subRegions) {
+  return {
+    allContentfulDataGeoRegionSubRegion: {
+      nodes: [...subRegions],
+    },
+    allContentfulDataGeoRegion: {
+      nodes: [...regions],
+    },
+  }
+}
+
 describe('Where We Work', function () {
   describe('flattenToRows', function () {
     it('Can Be Called', function () {
@@ -168,19 +206,21 @@ describe('Where We Work', function () {
     })
 
     it('flattens one sub-region', function () {
+      const data = givenData([regionFrance], [subregionParis])
+
       const expected = [
         {
-          contentfulId: '4nuGDkPN1NvvBYpCnu2O73',
-          name: 'Greece',
+          contentfulId: regionFrance.contentful_id,
+          name: regionFrance.name,
           subRegions: [
             {
-              contentfulId: '15DzXnD4u70h24CQORFsiT',
-              name: 'Athens/Southern Mainland',
+              contentfulId: subregionParis.contentful_id,
+              name: subregionParis.name,
             },
           ],
         },
       ]
-      expect(flattenToRows(greeceData)).to.deep.equal(expected)
+      expect(flattenToRows(data)).to.deep.equal(expected)
     })
 
     it('flattens multiple regions', function () {
