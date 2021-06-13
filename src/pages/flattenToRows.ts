@@ -12,8 +12,7 @@ export interface SomeInterface {
 
 // [{contentfulId, name, slug, subRegionName, subRegionSlug, subRegionContentfulId]}]
 export const flattenToRows = (data: SomeInterface) => {
-  const regions = mapRegion(data)
-  return regions
+  return mapRegion(data)
 }
 
 const mapSubRegion = (data, regionId) => {

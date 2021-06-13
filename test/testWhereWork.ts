@@ -188,6 +188,20 @@ const subregionParis = {
   region: { contentful_id: '3MYazP862LGoycVYX2w492' },
 }
 
+const subregionAthens = {
+  contentful_id: '15DzXnD4u70h24CQORFsiT',
+  name: 'Athens/Southern Mainland',
+  slug: 'athens-southern-mainland',
+  region: { contentful_id: '4nuGDkPN1NvvBYpCnu2O73' },
+}
+
+const subregionAegeanIslands = {
+  contentful_id: 'YEHgwxNjCpd8nD3FG651I',
+  name: 'Aegean Islands',
+  slug: 'aegean-islands',
+  region: { contentful_id: '4nuGDkPN1NvvBYpCnu2O73' },
+}
+
 function givenData(regions, subRegions) {
   return {
     allContentfulDataGeoRegionSubRegion: {
@@ -196,6 +210,19 @@ function givenData(regions, subRegions) {
     allContentfulDataGeoRegion: {
       nodes: [...regions],
     },
+  }
+}
+
+function expectRegion(region, subRegions) {
+  return {
+    contentfulId: region.contentful_id,
+    name: region.name,
+    subRegions: subRegions.map((subRegion) => {
+      return {
+        contentfulId: subRegion.contentful_id,
+        name: subRegion.name,
+      }
+    }),
   }
 }
 
@@ -208,128 +235,35 @@ describe('Where We Work', function () {
     it('flattens one sub-region', function () {
       const data = givenData([regionFrance], [subregionParis])
 
-      const expected = [
-        {
-          contentfulId: regionFrance.contentful_id,
-          name: regionFrance.name,
-          subRegions: [
-            {
-              contentfulId: subregionParis.contentful_id,
-              name: subregionParis.name,
-            },
-          ],
-        },
-      ]
+      const expected = [expectRegion(regionFrance, [subregionParis])]
       expect(flattenToRows(data)).to.deep.equal(expected)
     })
 
     it('flattens multiple regions', function () {
-      const greeceAndFrance = {
-        allContentfulDataGeoRegionSubRegion: {
-          nodes: [
-            {
-              contentful_id: '15DzXnD4u70h24CQORFsiT',
-              name: 'Athens/Southern Mainland',
-              slug: 'athens-southern-mainland',
-              region: { contentful_id: '4nuGDkPN1NvvBYpCnu2O73' },
-            },
-            {
-              contentful_id: '5QleMRmhfjcCPJcl0hyapC',
-              name: 'Calais/Dunkirk',
-              slug: 'calais-dunkirk',
-              region: { contentful_id: '3MYazP862LGoycVYX2w492' },
-            },
-          ],
-        },
-        allContentfulDataGeoRegion: {
-          nodes: [
-            {
-              contentful_id: '4nuGDkPN1NvvBYpCnu2O73',
-              name: 'Greece',
-              slug: 'greece',
-            },
-            {
-              contentful_id: '3MYazP862LGoycVYX2w492',
-              name: 'France',
-              slug: 'france',
-            },
-          ],
-        },
-      }
+      const data = givenData(
+        [regionFrance, regionGreece],
+        [subregionParis, subregionAthens],
+      )
 
       const expected = [
-        {
-          contentfulId: '4nuGDkPN1NvvBYpCnu2O73',
-          name: 'Greece',
-          subRegions: [
-            {
-              contentfulId: '15DzXnD4u70h24CQORFsiT',
-              name: 'Athens/Southern Mainland',
-            },
-          ],
-        },
-
-        {
-          contentfulId: '3MYazP862LGoycVYX2w492',
-          name: 'France',
-          subRegions: [
-            {
-              contentfulId: '5QleMRmhfjcCPJcl0hyapC',
-              name: 'Calais/Dunkirk',
-            },
-          ],
-        },
+        expectRegion(regionFrance, [subregionParis]),
+        expectRegion(regionGreece, [subregionAthens]),
       ]
 
-      expect(flattenToRows(greeceAndFrance)).to.deep.equal(expected)
+      expect(flattenToRows(data)).to.deep.equal(expected)
     })
 
-    xit('flattens multiple sub-regions', function () {
-      const greeceMultiSubRegionData = {
-        allContentfulDataGeoRegionSubRegion: {
-          nodes: [
-            {
-              contentful_id: '15DzXnD4u70h24CQORFsiT',
-              name: 'Athens/Southern Mainland',
-              slug: 'athens-southern-mainland',
-              region: { contentful_id: '4nuGDkPN1NvvBYpCnu2O73' },
-            },
-            {
-              contentful_id: 'YEHgwxNjCpd8nD3FG651I',
-              name: 'Aegean Islands',
-              slug: 'aegean-islands',
-              region: { contentful_id: '4nuGDkPN1NvvBYpCnu2O73' },
-            },
-          ],
-        },
-        allContentfulDataGeoRegion: {
-          nodes: [
-            {
-              contentful_id: '4nuGDkPN1NvvBYpCnu2O73',
-              name: 'Greece',
-              slug: 'greece',
-            },
-          ],
-        },
-      }
+    it('flattens multiple sub-regions', function () {
+      const data = givenData(
+        [regionGreece],
+        [subregionAthens, subregionAegeanIslands],
+      )
 
       const expected = [
-        {
-          contentfulId: '4nuGDkPN1NvvBYpCnu2O73',
-          name: 'Greece',
-          subRegions: [
-            {
-              contentfulId: '15DzXnD4u70h24CQORFsiT',
-              name: 'Athens/Southern Mainland',
-            },
-            {
-              contentfulId: 'YEHgwxNjCpd8nD3FG651I',
-              name: 'Aegean Islands',
-            },
-          ],
-        },
+        expectRegion(regionGreece, [subregionAthens, subregionAegeanIslands]),
       ]
-      expect(flattenToRows(greeceMultiSubRegionData)).to.deep.equal(expected)
+
+      expect(flattenToRows(data)).to.deep.equal(expected)
     })
   })
 })
