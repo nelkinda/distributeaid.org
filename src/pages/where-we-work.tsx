@@ -4,6 +4,7 @@ import { graphql } from 'gatsby'
 import React, { FunctionComponent, useMemo } from 'react'
 import { useSortBy, useTable } from 'react-table'
 import TableHeader from '../components/table/TableHeader'
+import { flattenToRows, Props } from './flattenToRows'
 
 // Given a list of x, y, z regions in contentful
 // When we navigate to the "where we work" page
@@ -37,55 +38,13 @@ const IndeterminateCheckbox = React.forwardRef(
 const COLUMNS = [
   {
     Header: 'Region Name',
-    accessor: (row) => row.regionName,
-  },
-  {
-    Header: 'Region Slug',
-    accessor: (row) => row.regionSlug,
+    accessor: (row) => row.name,
   },
   {
     Header: 'List of SubRegions',
-    accessor: (row) => row.name,
+    accessor: (row) => row.subRegions.map((item) => item.name).join(', '),
   },
 ]
-
-interface Props {
-  data: {
-    allContentfulDataGeoRegion
-    allContentfulDataGeoRegionSubRegion
-  }
-}
-
-// [{contentfulId, name, slug, subRegionName, subRegionSlug, subRegionContentfulId]}]
-const flattenToRows = (data: Props) => {
-  if (!data) return []
-  const {
-    allContentfulDataGeoRegion: { nodes: regionNodes }, // regionNodes ['France', 'Greece', ...]
-    allContentfulDataGeoRegionSubRegion: { nodes: subRegionNodes }, // subRegionNodes {name: "Calais/Dunkirk", region: {contentful_id: "3MYazP862LGoycVYX2w492"}}
-  } = data
-  const displaySubRegion = {}
-  return subRegionNodes.map((subRegionNode) => {
-    const matchingRegion = regionNodes.find(
-      (regionNode) =>
-        regionNode.contentful_id === subRegionNode.region.contentful_id,
-    )
-
-    if (displaySubRegion[matchingRegion.name]) {
-      displaySubRegion[matchingRegion.name].push(subRegionNode.name)
-    } else {
-      displaySubRegion[matchingRegion.name] = [subRegionNode.name]
-    }
-
-    console.log(displaySubRegion)
-
-    return {
-      ...subRegionNode,
-      regionContentfulId: matchingRegion.contentful_id,
-      regionName: matchingRegion.name,
-      regionSlug: matchingRegion.slug,
-    }
-  })
-}
 
 const RegionPage: FunctionComponent<Props> = ({ data }) => {
   // We must memoize the data for react-table to function properly

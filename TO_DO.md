@@ -1,8 +1,34 @@
+## Current Task
+
+- Format it - regions and subregions and more - Link these to other pages
+- Test; where we work (line 60 function = flattenToRows )
+  Greece Athens/Southern Mainland, Aegean Islands, Chios, Lesvos, Samos, Thessaloniki/ Northern Mainland
+- Test Wrapping case in case they are many sub regions
+- Test Order the subregion alphabetically
+
+# Questions and Ideas (Anyone can type in this section )
+
+What are the fundamentals of Typescript?
+https://learnxinyminutes.com/docs/typescript/
+
+https://github.com/TypeStrong/ts-node/issues/922
+
+Why can't we compile the production code from our tests??
+
+# Joining The Mob instructions
+
+- Gitpod IDE: https://apricot-duck-vrsd6ain.ws-eu09.gitpod.io/#/workspace/distributeaid.org
+  (It takes a few minutes to load so please load this first. Github is good for credentials generally.)
+
+- Feel free to add yourselves to the timer: http://mobtime.herokuapp.com/hairy
+
+- Running test:
+  yarn test
+
 ## What are the next steps?
 
 - Use the graphQL to pull useful information
 - Include this information on the page
-- Format it - regions and subregions and more - Link these to other pages
 - build new template page in order to use it to navigate on it once we click on a region. This template will need to be
   added to the gatsby-node L.297/229 :
   - links to be like `localhost:8000/where-we-work/france` france would be the slug of the region
